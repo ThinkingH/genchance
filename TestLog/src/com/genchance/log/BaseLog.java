@@ -1,0 +1,195 @@
+package com.genchance.log;
+
+import com.alibaba.fastjson.JSON;
+
+import java.sql.Timestamp;
+
+/**
+ *
+ */
+public abstract class BaseLog {
+	private String logUid;//日志记录ID（自动生成）
+	private Timestamp logTime; // 日志时间，Java中的统一时间
+	private String gameCode; // 所属游戏编码
+	private int regionId; // 服务器区ID
+	private int serverId; // 服务器ID
+	private String accountId; // 账号信息
+	private String accountName;
+	private long charId; // 角色ID
+	private String charName;
+	private String loginType;//登陆type
+
+	private String rid;//关联ID（一个逻辑中多条日志的标示，便于多条日志关联查询）
+	private int reason; //日志的原因
+	private String param; //附加参数
+	private String tableName;//日志表名
+	private long CreateTime;
+
+    public BaseLog() {
+
+    }
+
+	public BaseLog(String aid, String accountName, long cid,
+                   String charName, String rid, String loginType, int reason, String param) {
+		this.logTime = new Timestamp(System.currentTimeMillis());
+		this.gameCode = LogService.getInstance().getGameCode();
+		this.regionId = LogService.getInstance().getRegionID();
+		this.serverId = LogService.getInstance().getServerID();
+		this.accountId = aid;
+		this.accountName = accountName;
+		this.charId = cid;
+		this.charName = charName;
+		this.rid = rid;
+		this.reason = reason;
+		this.param = param;
+		this.loginType = loginType;
+	}
+
+	/**
+	 * @return the accountName
+	 */
+	public String getAccountName() {
+		return accountName;
+	}
+
+	/**
+	 * @param accountName
+	 *            the accountName to set
+	 */
+	public void setAccountName(String accountName) {
+		this.accountName = accountName;
+	}
+
+	public String getGameCode() {
+		return gameCode;
+	}
+
+	public void setGameCode(String gameCode) {
+		this.gameCode = gameCode;
+	}
+
+	/**
+	 * @return the charName
+	 */
+	public String getCharName() {
+		return charName;
+	}
+
+	/**
+	 * @param charName
+	 *            the charName to set
+	 */
+	public void setCharName(String charName) {
+		this.charName = charName;
+	}
+
+	/**
+	 * @return the reason
+	 */
+	public int getReason() {
+		return reason;
+	}
+
+	/**
+	 * @param reason
+	 *            the reason to set
+	 */
+	public void setReason(int reason) {
+		this.reason = reason;
+	}
+
+	/**
+	 * @return the param
+	 */
+	public String getParam() {
+		return param;
+	}
+
+	/**
+	 * @param param
+	 *            the param to set
+	 */
+	public void setParam(String param) {
+		this.param = param;
+	}
+
+	public int getRegionId() {
+		return regionId;
+	}
+
+	public void setRegionId(int regionId) {
+		this.regionId = regionId;
+	}
+
+	public int getServerId() {
+		return serverId;
+	}
+
+	public void setServerId(int serverId) {
+		this.serverId = serverId;
+	}
+
+	public String getTableName() {
+		return tableName;
+	}
+
+	public void setTableName(String tableName) {
+		this.tableName = tableName;
+	}
+
+	public String getLogUid() {
+		return logUid;
+	}
+
+	public void setLogUid(String logUid) {
+		this.logUid = logUid;
+	}
+	public String getAccountId() {
+		return accountId;
+	}
+	public void setAccountId(String accountId) {
+		this.accountId = accountId;
+	}
+	public long getCreateTime() {
+		return CreateTime;
+	}
+	public void setCreateTime(long createTime) {
+		CreateTime = createTime;
+	}
+	public String getRid() {
+		return rid;
+	}
+	public void setRid(String rid) {
+		this.rid = rid;
+	}
+	public Timestamp getLogTime() {
+		return logTime;
+	}
+	public void setLogTime(Timestamp logTime) {
+		this.logTime = logTime;
+	}
+
+	public abstract String getLogName();
+	public long getCharId() {
+		return charId;
+	}
+	public void setCharId(long charId) {
+		this.charId = charId;
+	}
+	public String getLoginType() {
+		return loginType;
+	}
+	public void setLoginType(String loginType) {
+		this.loginType = loginType;
+	}
+	@Override
+	public String toString() {
+
+//		StringBuilder sb = new StringBuilder();
+//		ReflectionToStringBuilder.setDefaultStyle(ToStringStyle.SHORT_PREFIX_STYLE);
+//		sb.append(ReflectionToStringBuilder.toStringExclude(this,new String[]{"memberId","userId","regDate","unregDate","memberStatus","messageSource","buf","messageLength","type","name","charName"}).replaceAll("(\\w+\\[)|\\]|\\<|\\>","")) ;
+//		return sb.toString();
+//		return JSONObject.fromObject(this).toString();
+		return JSON.toJSONString(this);
+	}
+}

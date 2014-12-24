@@ -1,0 +1,94 @@
+/**
+ * 
+ */
+package ${reasonsDirs};
+
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+/**
+ * 日志系统的日志原因定义
+ * 
+ * @author ${generator}
+ * @version 1.00 
+ * 
+ */
+public interface LogReasons {
+
+	@Documented
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target( { ElementType.FIELD, ElementType.TYPE })
+	public @interface ReasonDesc {
+		/**
+		 * 原因的文字描述
+		 * 
+		 * @return
+		 */
+		String value();
+	}
+
+	/**
+	 * LogReason的通用接口
+	 */
+	public static interface ILogReason<E extends Enum<E>> {
+		/**
+		 * 取得原因的序号
+		 * 
+		 * @return
+		 */
+		public int getReason();
+
+		public E getReasonEnum();
+		
+		public E getEnumByReason(int reason);
+	}
+	
+
+	#foreach($reasion in $reasionList)
+	
+	/**
+	 * 
+	 * $reasion.getTableName() 的原因
+	 * 
+	 */
+	public enum $reasion.getKey() implements ILogReason<$reasion.getKey()> {
+
+		#foreach($reasionInfo in $reasion.getList())
+		/** $reasionInfo.getDesc() $velocityCount*/
+        @ReasonDesc("$reasionInfo.getDesc()")
+        $reasionInfo.getId()($reasionInfo.getValue())#if($velocityCount != $reasion.getList().size()),#else;#end
+		#end
+		
+		
+		
+		/**
+		 * 原因序号
+		 */
+		public final int reason;
+
+		private $reasion.getKey()(int reason) {
+			this.reason = reason;
+		}
+
+		public $reasion.getKey() getReasonEnum() {
+			return this;
+		}
+
+		public int getReason() {
+			return this.reason;
+		}
+		
+        public $reasion.getKey() getEnumByReason(int id) {
+            for ($reasion.getKey() eEnum : $reasion.getKey() .values()) {
+                if (eEnum.reason == id) {
+                    return eEnum;
+                }
+            }
+            return null;
+        }
+	}
+    #end
+}

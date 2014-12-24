@@ -1,0 +1,54 @@
+import com.sun.tools.javac.resources.compiler
+
+apply plugin: 'idea'
+apply plugin: 'java'
+apply plugin: 'java-library-distribution'
+apply plugin: 'executable-jar'
+
+defaultTasks 'clean', 'jar'
+
+version = '1.0.0'
+archivesBaseName = "LogTools"
+
+distributions {
+    main{
+        baseName = 'LogTools'
+    }
+}
+
+jar {
+    archiveName = 'LogTools.jar'
+    manifest {
+        attributes("Implementation-Title": "build by gradle", "MMO-Server-Version": version)
+    }
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src'
+        }
+        resources {
+            srcDir 'resource'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: './libs', include: '*.jar')
+}
+
+tasks.withType(Compile) {
+    options.encoding = "UTF-8"
+}
+
+mainClass = 'com.genchance.tools.codegen.ModelLogMsgGenerator'
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'net.nisgits.gradle:gradle-executable-jar-plugin:1.7.0'
+    }
+}

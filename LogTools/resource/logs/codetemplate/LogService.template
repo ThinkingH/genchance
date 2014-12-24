@@ -1,0 +1,185 @@
+package ${packageName}.log;
+
+#foreach($logConfig in $logConfigs)
+import ${packageName}.log.model.${logConfig.getLogFileName()};
+#end
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import ${reasonsDirs}.LogReasons;
+
+/**
+ * 
+ * 文件名：LogService
+ * <p>
+ * 功能：LogService
+ * <p>
+ * 版本：1.0.0
+ * <p>
+ * 日期：2011-04-05
+ * <p>
+ * 作者：XXX
+ * <p>
+ * 版权：(c)XX游戏
+ */
+public class LogService {
+    private static final Logger logger = LoggerFactory.getLogger(LogService.class);
+    
+    /**  游戏编码 */
+    private String gameCode;
+    /**  游戏区ID */
+    private int regionID;
+    /** 游戏服务器ID */
+    private int serverID;
+
+    private static LogService logService = null;
+
+    public static LogService getInstance() {
+        if (logService == null) {
+            logService = new LogService();
+        }
+        return logService;
+    }
+    /**
+     * 初始化
+     *
+     * @param gameCode
+     *            gameCode
+     * @param regionID
+     *            游戏区ID
+     * @param serverID
+     *            游戏服务器ID
+     */
+    public void init(String gameCode, int regionID, int serverID) {
+        if (logService == null) {
+            logService.setGameCode(gameCode);
+            logService.setRegionID(regionID);
+            serverID = regionID * 1000 + serverID;
+            logService.setServerID(serverID);
+
+            if (logger.isInfoEnabled()) {
+                logger.info("init Log service gameCode: " + gameCode + " regionID: " + regionID + " serverID: " + serverID);
+            }
+        } else {
+            logger.error("init Log Service faild!");
+            System.exit(0);
+        }
+
+    }
+
+    #foreach($logConfig in $logConfigs)
+    #set($fields = ${logConfig.getFields()})
+    /**
+     * 发送${logConfig.logInfo}
+     #foreach($field in $sharedFields)
+     #if(($field.name != "logType") && ($field.name != "regionId") && ($field.name != "serverId"))
+     * @param $field.name $field.fieldInfo
+     #end 
+     #end
+     #foreach($field in $fields)
+     * @param ${field.name} ${field.fieldInfo}
+     #end
+     */
+    public void send${logConfig.getLogFileName()}(String accountId,                                
+                                                String accountName,                                
+                                                long charId,
+                                                String charName,
+    #foreach($field in $sharedFields) 
+        #if($field.name=="reason")LogReasons.${logConfig.getLogFileName()}Reason $field.name
+            #if($velocityCount!=$sharedFields.size()),#end 
+        #elseif(($field.name == "param" || $field.name == "rid") || $field.name == "loginType")$field.type $field.name
+            #if($velocityCount!=$sharedFields.size()),#end #end #end 
+            #foreach($field in $fields), $field.type $field.name #end) {
+        try {
+
+            ${logConfig.getLogFileName()} log = new ${logConfig.getLogFileName()}(
+            #foreach($field in $sharedFields)
+                #if($field.name == "logType")
+                #elseif($field.name=="param")
+                    $field.name#if($velocityCount!=$sharedFields.size()),#end
+                #elseif($field.name=="reason")
+                    ${field.name}.reason#if($velocityCount!=$sharedFields.size()),#end
+                #elseif($field.name=="accountId")
+                    $field.name#if($velocityCount!=$sharedFields.size()),#end
+                #elseif($field.name=="accountName")
+                    $field.name#if($velocityCount!=$sharedFields.size()),#end
+                #elseif($field.name=="charId")
+                    $field.name#if($velocityCount!=$sharedFields.size()),#end
+                #elseif($field.name=="charName")
+                    $field.name#if($velocityCount!=$sharedFields.size()),#end
+                #elseif($field.name=="logTime")
+                #elseif($field.name=="rid")
+                    rid#if($velocityCount!=$sharedFields.size()),#end
+                #elseif($field.name=="loginType")
+                    loginType#if($velocityCount!=$sharedFields.size()),#end
+                #end
+                
+            #end
+            #foreach($field in $fields)
+                ,$field.name
+            #end
+            );
+            
+            logGameInfo(log);
+        } catch (Exception e) {
+            logger.error("log error:", e);
+        }
+    }
+    #end
+    
+    /**
+     * 获得rid
+     * 
+     * @return rid
+     */
+    public String getRid() {
+        return String.valueOf(System.currentTimeMillis());
+    }
+
+    /**
+     * 获得gameCode
+     *
+     * @return gameCode
+     */
+    public String getGameCode() {
+        return this.gameCode;
+    }
+
+    public void setGameCode(String gameCode) {
+        this.gameCode = gameCode;
+    }
+
+    /**
+     * 获得regionID
+     *
+     * @return regionID
+     */
+    public int getRegionID() {
+        return this.regionID;
+    }
+
+    public void setRegionID(int regionID) {
+        this.regionID = regionID;
+    }
+
+    /**
+     * 获得serverID
+     *
+     * @return serverID
+     */
+    public int getServerID() {
+        return this.serverID;
+    }
+
+    public void setServerID(int serverID) {
+        this.serverID = serverID;
+    }
+
+    /**
+     * 记录log4j日志
+     * @param logBean logInfo           日志信息
+     */
+    public static void logGameInfo(BaseLog logBean){
+        LoggerFactory.getLogger(logBean.getLogName()).warn(logBean.toString());
+    }
+
+}

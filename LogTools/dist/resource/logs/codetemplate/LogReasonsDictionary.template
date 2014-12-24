@@ -1,0 +1,80 @@
+{
+	"jsonConfig":{
+		"$gameCode": {
+	        "name": "$gameName",
+	        "type": {
+				#foreach($reasion in $reasionList)
+					"$reasion.getShortName()":{
+						"name": "$reasion.getTableName()",
+						"message.reason": {
+							#foreach($reasionInfo in $reasion.getList())
+							"$reasionInfo.getValue()" : "$reasionInfo.getDesc()"#if($velocityCount != $reasion.getList().size()),#end
+							#end
+				  		}
+					}
+		      		#if($velocityCount != $reasionList.size()),#end
+				#end
+			},
+			"others": {
+				"message.logName": {
+					#foreach($reasion in $reasionList)
+						"$reasion.getShortName()": "$reasion.getTableName()"#if($velocityCount != $reasionList.size()),#end
+					#end
+				},
+				"message.blessCardType": {
+					"-1": "非抽卡",
+					"1": "普通抽奖",
+					"2": "普通十连抽",
+					"3": "普通材料",
+					"4": "宝石火",
+					"5": "宝石水",
+					"6": "宝石木",
+					"7": "宝石十连抽",
+					"8": "宝石材料",
+					"9": "活动火",
+					"10": "活动水",
+					"11": "活动木",
+					"12": "活动十连",
+					"400011": "夏侯惇",
+					"400021": "魏延",
+					"400031": "小乔",
+					"400032": "大乔"
+				},
+				"message.jadetype": {
+					"1": "GM玉石",
+					"2": "RMB玉石"
+				},
+				"message.cardType": {
+					"1": "战斗卡",
+					"2": "金币卡",
+					"3": "经验卡",
+					"4": "进化卡",
+					"5": "技能卡"
+				},
+				"message.dungeonType": {
+					"NORMAL_DUNGEON": "普通关卡",
+					"ELITE_DUNGEON": "精英关卡",
+					"RESOURCE_DUNGEON": "资源关卡",
+					"ACTIVITY_DUNGEON": "活动关卡"
+				},
+				"message.userOperation": {
+					"GIFT_GET": "礼包获得",
+					"DUNGEON_COMPLETE": "关卡完成",
+					"DUNGEON_FAIL": "关卡失败",
+					"CARD_COMB_ADD": "卡牌进化",
+					"CARD_GACHA_ADD": "抽卡",
+					"CARD_HECHENG_CONSUME_DEL": "卡牌合成",
+					"CARD_CHANGE": "普通卡片替换",
+					"CARD_A_CHANGE": "A卡片替换"
+				},
+				"message.friendNumArea": {
+					"ZERO_TO_FOUR": "0-4位好友",
+					"FIVE_TO_TEN": "5-10位好友",
+					"ELEVEN_TO_TWENTY": "11-20位好友",
+					"TWENTYONE_TO_THIRTY": "21-30位好友",
+					"OVER_THIRTY": "30位以上好友"
+				}
+			}
+		}
+	}
+}	

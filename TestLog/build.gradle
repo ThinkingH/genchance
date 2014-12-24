@@ -1,0 +1,40 @@
+apply plugin: 'idea'
+apply plugin: 'java'
+apply plugin: 'java-library-distribution'
+
+defaultTasks 'clean', 'jar'
+
+version = '1.0.0'
+archivesBaseName = "TestLogTools"
+
+distributions {
+    main{
+        baseName = 'TestLogTools'
+    }
+}
+
+jar {
+    archiveName = 'TestLogTools.jar'
+    manifest {
+        attributes("Implementation-Title": "build by gradle", "MMO-Server-Version": version)
+    }
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src'
+        }
+        resources {
+            srcDir 'resources'
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: './libs', include: '*.jar')
+}
+
+tasks.withType(Compile) {
+    options.encoding = "UTF-8"
+}
