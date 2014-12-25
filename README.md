@@ -10,3 +10,4 @@ genchance公共工程库
     TestPassport 平台passport jar包测试工程，简单的介绍了passport jar包的使用方法
 
 
+详细文档参考WIKI(https://github.com/harryboda/genchance/wiki)
