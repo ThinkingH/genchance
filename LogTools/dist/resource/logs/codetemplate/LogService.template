@@ -53,7 +53,6 @@ public class LogService {
         if (logService == null) {
             logService.setGameCode(gameCode);
             logService.setRegionID(regionID);
-            serverID = regionID * 1000 + serverID;
             logService.setServerID(serverID);
 
             if (logger.isInfoEnabled()) {

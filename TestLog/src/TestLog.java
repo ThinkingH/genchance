@@ -9,7 +9,7 @@ public class TestLog {
         //服务器启动时初始化日志服务 需要配合log4j配置使用
         String gameCode = "pokersg";
         int regionID = 1;
-        int serverID = 1;
+        int serverID = 1997;
         LogService.getInstance().init(gameCode, regionID, serverID);
 
         //基本参数
